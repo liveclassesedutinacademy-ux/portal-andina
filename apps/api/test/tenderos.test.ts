@@ -32,3 +32,38 @@ describe('GET /api/tenderos/:id', () => {
     expect(res.status).toBe(404);
   });
 });
+
+describe('PUT /api/tenderos/:id', () => {
+  it('actualiza el teléfono y el correo', async () => {
+    const { app } = appDePrueba();
+    const res = await request(app).put('/api/tenderos/1').send({ telefono: '555-0199', correo: 'nuevo@ejemplo.test' });
+    expect(res.status).toBe(200);
+    expect(res.body.tendero.telefono).toBe('555-0199');
+    expect(res.body.tendero.correo).toBe('nuevo@ejemplo.test');
+  });
+
+  it('permite borrar el correo', async () => {
+    const { app } = appDePrueba();
+    const res = await request(app).put('/api/tenderos/1').send({ correo: null });
+    expect(res.status).toBe(200);
+    expect(res.body.tendero.correo).toBeNull();
+  });
+
+  it('rechaza un correo inválido', async () => {
+    const { app } = appDePrueba();
+    const res = await request(app).put('/api/tenderos/1').send({ correo: 'sin-arroba' });
+    expect(res.status).toBe(400);
+  });
+
+  it('no permite cambiar el documento', async () => {
+    const { app } = appDePrueba();
+    const res = await request(app).put('/api/tenderos/1').send({ numeroDocumento: '999000000' });
+    expect(res.status).toBe(400);
+  });
+
+  it('responde 404 si el tendero no existe', async () => {
+    const { app } = appDePrueba();
+    const res = await request(app).put('/api/tenderos/9999').send({ telefono: '555-0199' });
+    expect(res.status).toBe(404);
+  });
+});
