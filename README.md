@@ -29,12 +29,25 @@ Abre http://localhost:5173 e ingresa con el código de vendedor `V-101`, `V-102`
 
 ## Puntos de control
 El repositorio tiene una rama por cada punto de control del curso (`punto-01-inicio`, `punto-02-plan-aprobado`…), con el estado esperado al terminar cada etapa.
-Si te pierdes, puedes comparar tu trabajo con un punto de control o partir de él:
+Si te pierdes, puedes comparar tu trabajo con un punto de control o partir de él.
+
+Para ver y comparar:
 ```bash
 git branch -r                                   # lista los puntos de control
 git diff origin/punto-02-plan-aprobado          # compara tu trabajo con un punto de control
-git switch -c mi-rama origin/punto-01-inicio    # empieza una rama desde un punto de control
 ```
+
+**Los puntos de control no son para abrir un pull request.** En una copia creada con «Include all branches», GitHub guarda cada rama como un commit inicial propio, así que los puntos de control y `main` no comparten historia. Si creas tu rama directamente desde un punto de control, GitHub no podrá compararla con `main` y no te dejará abrir el pull request.
+
+Para partir de un punto de control, crea tu rama desde `main` y trae los archivos del punto:
+```bash
+git switch main
+git switch -c mi-rama                           # tu rama de trabajo, creada desde main
+git checkout origin/punto-04-endpoint-revisado -- .   # cambia el número por el punto que necesitas
+git add -A
+git commit -m "Parto del punto 04"
+```
+Después sigue trabajando en `mi-rama` y abre el pull request desde ella hacia `main`.
 
 ## Estructura
 ```
